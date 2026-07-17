@@ -6,17 +6,17 @@ A full-stack web application for managing users, built with **Spring Boot** (bac
 
 ## Overview
 
-This project implements a complete user management system with authentication (register/login), and full CRUD operations (Create, Read, Update, Delete) for user records. The backend exposes a REST API secured with validation and proper error handling, while the frontend provides a responsive interface for interacting with that API.
+This project implements a complete user management system with authentication (register/login), and full CRUD operations (Create, Read, Update, Delete) for user records. The backend exposes a REST API secured with validation, password hashing, and proper error handling, while the frontend provides a responsive interface for interacting with that API.
 
 ---
 
-##  Tech Stack
+## Tech Stack
 
 ### Backend
 - **Java** with **Spring Boot**
 - **Spring Data JPA** – database persistence
 - **PostgreSQL** – relational database
-- **Spring Security** – password encoding
+- **Spring Security** – password encoding (BCrypt)
 - **Maven** – dependency management
 - **Swagger** – API testing and documentation
 
@@ -27,7 +27,7 @@ This project implements a complete user management system with authentication (r
 
 ---
 
-##  Project Structure
+## Project Structure
 
 ```
 user-management/
@@ -51,7 +51,7 @@ user-management/
 
 ---
 
-##  Backend Setup
+## Backend Setup
 
 ### Prerequisites
 - Java 21+
@@ -67,7 +67,12 @@ user-management/
    ```
 
 2. **Configure the database**
-   Update `src/main/resources/application.properties` with your PostgreSQL credentials:
+
+   Copy the example config and fill in your own credentials — do not commit real credentials to version control:
+   ```bash
+   cp src/main/resources/application-example.properties src/main/resources/application.properties
+   ```
+   Then update `application.properties`:
    ```properties
    spring.datasource.url=jdbc:postgresql://localhost:5432/your_database_name
    spring.datasource.username=your_username
@@ -89,7 +94,7 @@ user-management/
 
 ---
 
-##  Frontend Setup
+## Frontend Setup
 
 ### Prerequisites
 - Node.js and npm installed
@@ -117,26 +122,27 @@ user-management/
 
 ---
 
-##  API Endpoints
+## API Endpoints
 
 | Method | Endpoint          | Description                |
 |--------|-------------------|----------------------------|
 | POST   | `/register`       | Register a new user        |
 | POST   | `/login`          | Authenticate a user        |
-| GET    | `/users`          | Get all users               |
+| GET    | `/users`          | Get all users              |
 | GET    | `/users/{id}`     | Get a user by ID           |
 | PUT    | `/users/{id}`     | Update a user by ID        |
 | DELETE | `/users/{id}`     | Delete a user by ID        |
 
 ---
 
-##  Features
+## Features
 
 ### Backend
 - User entity, repository, service, and controller layers
 - Register and Login APIs
 - Full CRUD operations for user management
 - Request validation (required fields, email format, password length)
+- Passwords hashed with BCrypt before storage
 - Centralized exception handling with meaningful error responses
 - API testing and documentation via Swagger
 
@@ -152,17 +158,35 @@ user-management/
 
 ---
 
-##  Testing
+## Security Notes
 
-All backend APIs were tested using **Swagger UI**, verifying:
+- Passwords are hashed using BCrypt before being stored — plaintext passwords are never persisted.
+- Token-based authentication (JWT) is **not yet implemented** — API endpoints are not currently guarded by an auth check beyond the login/register flow. This is a planned next step.
+
+---
+
+## Testing
+
+All backend APIs were tested manually using **Swagger UI**, verifying:
 - Successful registration and login
 - Correct validation error responses (e.g. invalid email, short password)
 - Accurate CRUD behavior for user records
 - Proper HTTP status codes for success and error cases
 
+Automated unit/integration tests are not yet included and are a possible future addition.
+
 ---
 
-##  Author
+## Roadmap / Not Yet Implemented
+
+- JWT authentication
+- Search functionality for users
+- Pagination and sorting on the user list
+- Logout functionality
+
+---
+
+## Author
 
 **Chamethya**
 BSc Computer Science Student, University of Westminster (IIT Colombo)
@@ -170,6 +194,6 @@ GitHub: [github.com/chamethyaY](https://github.com/chamethyaY)
 
 ---
 
-##  License
+## License
 
 This project was developed as an internal task for **Inova IT Systems**.
